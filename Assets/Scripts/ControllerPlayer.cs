@@ -11,6 +11,9 @@ public class ControllerPlayer : MonoBehaviour
     // Vitesse de saut
     public float vitesseDeSaut;
 
+    //Rigidbody component
+    Rigidbody rb;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +26,7 @@ public class ControllerPlayer : MonoBehaviour
         
     }
 
-    void WalkHandler()
+    void Déplacement()
     {
         // Input on x (Horizontal)
         float hAxis = Input.GetAxis("Horizontal");
