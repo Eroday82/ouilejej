@@ -12,18 +12,18 @@ public class ControllerPlayer : MonoBehaviour
     public float vitesseDeSaut;
 
     //Rigidbody component
-    Rigidbody rb;
+    Rigidbody2D rb;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        
+        Déplacement();
     }
 
     void Déplacement()
@@ -38,24 +38,10 @@ public class ControllerPlayer : MonoBehaviour
         Vector2 movement = new Vector2(hAxis * vitesseDeplacement * Time.deltaTime, 0);
 
         // Calculate the new position
-        Vector2 newPos = transform.position + movement;
+        Vector2 newPos = (Vector2) transform.position + movement;
 
-        // Move
+        // Déplacement
         rb.MovePosition(newPos);
-
-        //check that we are moving
-        if (hAxis != 0 || vAxis != 0)
-        {
-            //movement direction
-            Vector3 direction = new Vector3(hAxis, 0, vAxis);
-
-            //option1 : modify the transform
-            //transform.forward = direction;
-
-            //option 2: using our rigid body
-            rb.rotation = Quaternion.LookRotation(direction);
-
-        }
     }
 
 }
