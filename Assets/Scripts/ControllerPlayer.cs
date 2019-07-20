@@ -14,6 +14,9 @@ public class ControllerPlayer : MonoBehaviour
     //Rigidbody component
     Rigidbody2D rb;
 
+    //flag to keep track of key pressing
+    bool pressedJump = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +27,7 @@ public class ControllerPlayer : MonoBehaviour
     void FixedUpdate()
     {
         Déplacement();
+        Saut();
     }
 
     void Déplacement()
@@ -39,6 +43,31 @@ public class ControllerPlayer : MonoBehaviour
 
         // Déplacement
         rb.MovePosition(newPos);
+    }
+
+    // takes care of the jumping logic
+    void Saut()
+    {
+        // Input on the Jump axis
+        float jAxis = Input.GetAxis("Jump");
+
+        // If the key has been pressed
+        if (jAxis > 0)
+        {
+            
+                pressedJump = true;
+
+                //jumping vector
+                Vector2 jumpVector = new Vector2(0, jAxis * vitesseDeSaut);
+
+                //apply force
+                rb.AddForce(jumpVector, ForceMode2D.Impulse);
+        }
+        else
+        {
+            //set flag to false
+            pressedJump = false;
+        }
     }
 
 }
