@@ -4,26 +4,20 @@ using UnityEngine;
 
 public class ControllerPlayer : MonoBehaviour
 {
-
-    // Vitesse de déplacement 
+    
     public float vitesseDeplacement;
+    public float puissanceDeSaut;
+    public float fallMultiplier = 2.5f;
+    public float lowJumpMultiplier = 2f;
 
-    // Vitesse de saut
-    public float vitesseDeSaut;
-
-    //Rigidbody component
-    Rigidbody2D rb;
-
-    //flag to keep track of key pressing
-    bool pressedJump = false;
-
-    // Start is called before the first frame update
+    private Rigidbody2D rb;
+    bool isJump = false;
+    
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     }
-
-    // Update is called once per frame
+    
     void FixedUpdate()
     {
         Déplacement();
@@ -32,42 +26,32 @@ public class ControllerPlayer : MonoBehaviour
 
     void Déplacement()
     {
-        // Input on x (Horizontal)
         float hAxis = Input.GetAxis("Horizontal");
-
-        // Movement vector
         Vector2 movement = new Vector2(hAxis * vitesseDeplacement * Time.deltaTime, 0);
-
-        // Calculate the new position
         Vector2 newPos = (Vector2) transform.position + movement;
-
-        // Déplacement
         rb.MovePosition(newPos);
     }
-
-    // takes care of the jumping logic
+    
     void Saut()
     {
-        // Input on the Jump axis
-        float jAxis = Input.GetAxis("Jump");
-
-        // If the key has been pressed
-        if (jAxis > 0)
+        if (Input.GetButtonDown("Jump"))
         {
-            
-                pressedJump = true;
-
-                //jumping vector
-                Vector2 jumpVector = new Vector2(0, jAxis * vitesseDeSaut);
-
-                //apply force
-                rb.AddForce(jumpVector, ForceMode2D.Impulse);
-        }
-        else
-        {
-            //set flag to false
-            pressedJump = false;
+            rb.velocity = Vector2.up * puissanceDeSaut;
+            Vector2 jumpVector = new Vector2(0, Input.GetAxis("Jump") * puissanceDeSaut);
+            rb.AddForce(jumpVector);
         }
     }
 
+    //void MeilleurSaut()
+    //{
+    //    if (rb.velocity.y < 0)
+    //    {
+    //        rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+    //    }
+    //    else if (rb.velocity.y > 0 && !Input.GetButton("Jump"))
+    //    {
+    //        rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
+
+    //    }
+    //}
 }
