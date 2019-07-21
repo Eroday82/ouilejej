@@ -6,7 +6,9 @@ public class EnnemiController : MonoBehaviour
 {
 
     public float speed = 1;
-    
+    public float mouvXPos;
+    public float mouvXNeg;
+
     Vector2 initialPos;
 
     int direction = 1;
@@ -21,11 +23,11 @@ public class EnnemiController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(transform.position.x < -2.2f)
+        if(transform.position.x < mouvXNeg)
         {
             direction = 1;
         }
-        else if (transform.position.x > 2.2f)
+        else if (transform.position.x > mouvXPos)
         {
             direction = -1;
         }
