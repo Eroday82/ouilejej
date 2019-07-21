@@ -6,7 +6,10 @@ using UnityEngine.UI;
 
 public class ControllerPlayer : MonoBehaviour
 {
-    public float life;
+    public float lifeMax;
+    private float life;
+    public float energyMax;
+    private float energy;
 
     public float vitesseDeplacement;
     public float puissanceDeSaut;
@@ -21,33 +24,23 @@ public class ControllerPlayer : MonoBehaviour
     
     public AudioSource source;
 
+    public Collider2D attackCollider;
+    private bool attacking;
+    private float attackTimer = 0f;
+    public float attackCd;
+    private int directionAttack;
+    private int directionAttackLast = 1;
+
     public Camera mainCamera;
     private Rigidbody2D rb;
     bool isJump = false;
 
-
-    [System.Serializable]
-    public class PlayerStats{
-
-        public int maxHealth = 100;
-        private int _curHealth;
-        public int curHealth{
-            get { return _curHealth; }
-            set { _curHealth = Mathf.Clamp(value, 0, maxHealth); }
-        }
-
-
-        public void Init(){
-
-            curHealth = maxHealth;
-        }
-
-    }
-
-
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        attackCollider.enabled = false;
+        energy = energyMax;
+        life = lifeMax;
     }
     
     void FixedUpdate()
@@ -59,12 +52,21 @@ public class ControllerPlayer : MonoBehaviour
         UpdateBar();
         CheckLife();
         CameraFollow();
+        attack();
     }
 
     void Déplacement()
     {
         float hAxis = Input.GetAxis("Horizontal");
         rb.velocity = new Vector2(hAxis * vitesseDeplacement, rb.velocity.y);
+        if (hAxis < 0)
+        {
+            directionAttack = -1;
+        }
+        else if (hAxis > 0)
+        {
+            directionAttack = 1;
+        }
     }
     
     void Saut()
@@ -76,7 +78,6 @@ public class ControllerPlayer : MonoBehaviour
             {
                 isJump = true;
                 Vector2 jumpVector = new Vector2(0, saut * puissanceDeSaut);
-
                 rb.AddForce(jumpVector);
             }
         }
@@ -104,9 +105,12 @@ public class ControllerPlayer : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Enemy"))
         {
-            lifeDown += 25f;
-            life -= 25f;
-            source.Play();
+            if (attacking == false)
+            {
+                lifeDown += 25f;
+                life -= 25f;
+                source.Play();
+            }
         }
         else if (collision.gameObject.CompareTag("Fin"))
         {
@@ -130,13 +134,20 @@ public class ControllerPlayer : MonoBehaviour
     {
         if (lifeDown != 0)
         {
-            barLife.fillAmount = ((barLife.fillAmount * 100) - 1) / 100;
+            barLife.fillAmount = ((barLife.fillAmount * 100) - 1) / lifeMax;
             lifeDown--; 
         }
-        if (energyDown != 0)
+        if (energyMax - energy != 0)
         {
-            barEnergy.fillAmount = ((barEnergy.fillAmount * 100) - 1) / 100;
-            energyDown--;
+            barEnergy.fillAmount -=  - 4  / energyMax;
+            energyDown -= 4;
+        }
+
+        if (energy <= energyMax)
+        {
+            barEnergy.fillAmount += 0.001f;
+            energy += 0.1f;
+            Debug.Log(energy);
         }
     }
 
@@ -151,5 +162,41 @@ public class ControllerPlayer : MonoBehaviour
     private void CameraFollow()
     {
         mainCamera.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -10);
+    }
+
+    private void attack()
+    {
+        
+        if (Input.GetKeyDown("f") && !attacking && energy >= 20)
+        { 
+            if (directionAttack != directionAttackLast)
+            {
+                attackCollider.transform.position = new Vector3
+                    (rb.transform.position.x + 0.8f * directionAttack, 
+                    rb.transform.position.y,
+                    rb.transform.position.z);
+                directionAttackLast = directionAttack;
+            }
+
+            energy -= 20;
+            energyDown += 20;
+            attacking = true;
+            attackTimer = attackCd;
+
+            attackCollider.enabled = true;
+        }
+
+        if (attacking)
+        {
+            if (attackTimer > 0)
+            {
+                attackTimer -= Time.deltaTime;
+            }
+            else
+            {
+                attacking = false;
+                attackCollider.enabled = false;
+            }
+        }
     }
 }
