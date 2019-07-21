@@ -2,16 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class ControllerPlayer : MonoBehaviour
 {
-    
+    public float life;
+
     public float vitesseDeplacement;
     public float puissanceDeSaut;
     public float fallMultiplier = 2.5f;
     public float lowJumpMultiplier = 2f;
 
+    public Image barLife;
+    public Image barEnergy;
+    private float lifeDown;
+    private float energyDown;
+    
+    public AudioSource source;
+
+    // Distance jusqu'où on peut tomber avant le game over
     public float fallMin;
+
+    
 
     private Rigidbody2D rb;
     bool isJump = false;
@@ -27,6 +39,8 @@ public class ControllerPlayer : MonoBehaviour
         Saut();
         MeilleurSaut();
         FallHandler();
+        UpdateBar();
+        CheckLife();
     }
 
     void Déplacement()
@@ -72,8 +86,9 @@ public class ControllerPlayer : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Enemy"))
         {
-            // Game over!
-            SceneManager.LoadScene("Menu");
+            lifeDown += 25f;
+            life -= 25f;
+            source.Play();
         }
         else if (collision.gameObject.CompareTag("Fin"))
         {
@@ -88,6 +103,29 @@ public class ControllerPlayer : MonoBehaviour
         if (transform.position.y <= fallMin)
         {
             // Game over!
+            SceneManager.LoadScene("Menu");
+        }
+    }
+
+    // La vie/mana descend dynamiquement
+    private void UpdateBar()
+    {
+        if (lifeDown != 0)
+        {
+            barLife.fillAmount = ((barLife.fillAmount * 100) - 1) / 100;
+            lifeDown--; 
+        }
+        if (energyDown != 0)
+        {
+            barEnergy.fillAmount = ((barEnergy.fillAmount * 100) - 1) / 100;
+            energyDown--;
+        }
+    }
+
+    private void CheckLife()
+    {
+        if(life <= 0)
+        {
             SceneManager.LoadScene("Menu");
         }
     }
