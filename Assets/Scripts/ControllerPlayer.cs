@@ -134,12 +134,12 @@ public class ControllerPlayer : MonoBehaviour
     {
         if (lifeDown != 0)
         {
-            barLife.fillAmount = ((barLife.fillAmount * 100) - 1) / lifeMax;
+            barLife.fillAmount -= 1 / lifeMax;
             lifeDown--; 
         }
-        if (energyMax - energy != 0)
+        if (energyDown > 0)
         {
-            barEnergy.fillAmount -=  - 4  / energyMax;
+            barEnergy.fillAmount -= 4 / energyMax;
             energyDown -= 4;
         }
 
