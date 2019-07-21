@@ -71,12 +71,17 @@ public class ControllerPlayer : MonoBehaviour
         {
             directionAttack = -1;
             rb.transform.rotation = (new Quaternion(0, 180, 0, 0));
-
+            anim.SetBool("IsRunning", true);
         }
         else if (hAxis > 0) 
         {
             directionAttack = 1;
             rb.transform.rotation = (new Quaternion(0, 0, 0, 0));
+            anim.SetBool("IsRunning", true);
+        }
+        else
+        {
+            anim.SetBool("IsRunning", false);
         }
     }
     
