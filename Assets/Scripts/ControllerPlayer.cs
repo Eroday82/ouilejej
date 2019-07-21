@@ -12,9 +12,7 @@ public class ControllerPlayer : MonoBehaviour
     public float puissanceDeSaut;
     public float fallMultiplier = 2.5f;
     public float lowJumpMultiplier = 2f;
-<<<<<<< HEAD
     public float fallMin;
-=======
 
     public Image barLife;
     public Image barEnergy;
@@ -24,12 +22,6 @@ public class ControllerPlayer : MonoBehaviour
     public AudioSource source;
 
     public Camera mainCamera;
-    // Distance jusqu'où on peut tomber avant le game over
-    public float fallMin;
-
-    
-
->>>>>>> 086ff6ce242c4f522ea0e5727a26cbf4073c12c7
     private Rigidbody2D rb;
     bool isJump = false;
 
@@ -52,16 +44,6 @@ public class ControllerPlayer : MonoBehaviour
 
     }
 
-    public PlayerStats stats = new PlayerStats();
-
-    public void DamagePlayer (int damage)
-    {
-        stats.curHealth -= damage;
-        if (stats.curHealth <= 0)
-        {
-            GameMaster.KillPlayer(this);
-        }
-    }
 
     void Start()
     {
