@@ -20,6 +20,7 @@ public class ControllerPlayer : MonoBehaviour
     
     public AudioSource source;
 
+    public Camera mainCamera;
     // Distance jusqu'où on peut tomber avant le game over
     public float fallMin;
 
@@ -41,6 +42,7 @@ public class ControllerPlayer : MonoBehaviour
         FallHandler();
         UpdateBar();
         CheckLife();
+        CameraFollow();
     }
 
     void Déplacement()
@@ -128,5 +130,10 @@ public class ControllerPlayer : MonoBehaviour
         {
             SceneManager.LoadScene("Menu");
         }
+    }
+
+    private void CameraFollow()
+    {
+        mainCamera.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -10);
     }
 }
