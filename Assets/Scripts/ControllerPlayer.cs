@@ -12,7 +12,13 @@ public class ControllerPlayer : MonoBehaviour
     public float puissanceDeSaut;
     public float fallMultiplier = 2.5f;
     public float lowJumpMultiplier = 2f;
+<<<<<<< HEAD
+
     public float fallMin;
+
+=======
+    public float fallMin;
+>>>>>>> 3782a072e62e7c7e16a15b24c0dbb643590b8f85
 
     public Image barLife;
     public Image barEnergy;
@@ -22,6 +28,14 @@ public class ControllerPlayer : MonoBehaviour
     public AudioSource source;
 
     public Camera mainCamera;
+<<<<<<< HEAD
+    // Distance jusqu'où on peut tomber avant le game over
+    public float fallMin;
+
+    
+
+=======
+>>>>>>> 3782a072e62e7c7e16a15b24c0dbb643590b8f85
     private Rigidbody2D rb;
     bool isJump = false;
 
