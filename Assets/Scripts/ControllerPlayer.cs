@@ -34,6 +34,8 @@ public class ControllerPlayer : MonoBehaviour
 
     public Camera mainCamera;
 
+    public Animator anim;
+
     
     
     private Rigidbody2D rb;
@@ -45,10 +47,12 @@ public class ControllerPlayer : MonoBehaviour
         attackCollider.enabled = false;
         energy = energyMax;
         life = lifeMax;
+        anim = GetComponent<Animator>();
     }
     
     void FixedUpdate()
     {
+        Debug.Log(anim.GetBool("doAttack"));
         Déplacement();
         Saut();
         MeilleurSaut();
@@ -66,10 +70,13 @@ public class ControllerPlayer : MonoBehaviour
         if (hAxis < 0)
         {
             directionAttack = -1;
+            rb.transform.rotation = (new Quaternion(0, 180, 0, 0));
+
         }
-        else if (hAxis > 0)
+        else if (hAxis > 0) 
         {
             directionAttack = 1;
+            rb.transform.rotation = (new Quaternion(0, 0, 0, 0));
         }
     }
     
@@ -151,7 +158,6 @@ public class ControllerPlayer : MonoBehaviour
         {
             barEnergy.fillAmount += 0.001f;
             energy += 0.1f;
-            Debug.Log(energy);
         }
     }
 
@@ -173,22 +179,25 @@ public class ControllerPlayer : MonoBehaviour
         
         if (Input.GetKeyDown("f") && !attacking && energy >= 20)
         { 
-            if (directionAttack != directionAttackLast)
-            {
-                attackCollider.transform.position = new Vector3
-                    (rb.transform.position.x + 0.8f * directionAttack, 
-                    rb.transform.position.y,
-                    rb.transform.position.z);
-                directionAttackLast = directionAttack;
-            }
+            //if (directionAttack != directionAttackLast)
+            //{
+            //    attackCollider.transform.position = new Vector3
+            //        (rb.transform.position.x + 0.8f * directionAttack, 
+            //        rb.transform.position.y,
+            //        rb.transform.position.z);
+            //    directionAttackLast = directionAttack;
+            //}
 
+            anim.SetBool("doAttack", true);
             energy -= 20;
             energyDown += 20;
             attacking = true;
             attackTimer = attackCd;
-
+            
             attackCollider.enabled = true;
+
         }
+         else { ;  }
 
         if (attacking)
         {
@@ -200,6 +209,7 @@ public class ControllerPlayer : MonoBehaviour
             {
                 attacking = false;
                 attackCollider.enabled = false;
+                anim.SetBool("doAttack", false);
             }
         }
     }
