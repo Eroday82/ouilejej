@@ -10,12 +10,40 @@ public class ControllerPlayer : MonoBehaviour
     public float puissanceDeSaut;
     public float fallMultiplier = 2.5f;
     public float lowJumpMultiplier = 2f;
-
     public float fallMin;
-
     private Rigidbody2D rb;
     bool isJump = false;
-    
+
+
+    [System.Serializable]
+    public class PlayerStats{
+
+        public int maxHealth = 100;
+        private int _curHealth;
+        public int curHealth{
+            get { return _curHealth; }
+            set { _curHealth = Mathf.Clamp(value, 0, maxHealth); }
+        }
+
+
+        public void Init(){
+
+            curHealth = maxHealth;
+        }
+
+    }
+
+    public PlayerStats stats = new PlayerStats();
+
+    public void DamagePlayer (int damage)
+    {
+        stats.curHealth -= damage;
+        if (stats.curHealth <= 0)
+        {
+            GameMaster.KillPlayer(this);
+        }
+    }
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
