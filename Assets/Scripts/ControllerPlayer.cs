@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ControllerPlayer : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class ControllerPlayer : MonoBehaviour
     public float puissanceDeSaut;
     public float fallMultiplier = 2.5f;
     public float lowJumpMultiplier = 2f;
+
+    public float fallMin;
 
     private Rigidbody2D rb;
     bool isJump = false;
@@ -23,6 +26,7 @@ public class ControllerPlayer : MonoBehaviour
         Déplacement();
         Saut();
         MeilleurSaut();
+        FallHandler();
     }
 
     void Déplacement()
@@ -33,13 +37,13 @@ public class ControllerPlayer : MonoBehaviour
     
     void Saut()
     {
-        
-        if (Input.GetButtonDown("Jump"))
+        float saut = Input.GetAxis("Jump");
+        if (saut > 0)
         {
             if (!isJump)
             {
                 isJump = true;
-                Vector2 jumpVector = new Vector2(0, Input.GetAxis("Jump") * puissanceDeSaut);
+                Vector2 jumpVector = new Vector2(0, saut * puissanceDeSaut);
 
                 rb.AddForce(jumpVector);
             }
@@ -65,6 +69,26 @@ public class ControllerPlayer : MonoBehaviour
         {
             isJump = false;
             rb.velocity = Vector2.zero;
+        }
+        else if (collision.gameObject.CompareTag("Enemy"))
+        {
+            // Game over!
+            SceneManager.LoadScene("Menu");
+        }
+        else if (collision.gameObject.CompareTag("Fin"))
+        {
+            // Bravo
+            SceneManager.LoadScene("Menu");
+        }
+    }
+
+    //check if the player fell
+    private void FallHandler()
+    {
+        if (transform.position.y <= fallMin)
+        {
+            // Game over!
+            SceneManager.LoadScene("Menu");
         }
     }
 }
