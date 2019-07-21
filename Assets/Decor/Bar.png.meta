@@ -8,6 +8,9 @@ TextureImporter:
   - first:
       213: 3737897332693287829
     second: bar_Empty
+  - first:
+      213: 3313657178801377820
+    second: bar_Life
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -127,6 +130,27 @@ TextureImporter:
       bones: []
       spriteID: f405b0d90a7991f46a4240720868cd1a
       internalID: 3737897332693287829
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bar_Life
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 345
+        width: 512
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38a81bffc856f0543936a90bcf1d77b7
+      internalID: 3313657178801377820
       vertices: []
       indices: 
       edges: []
